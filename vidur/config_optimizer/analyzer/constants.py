@@ -48,6 +48,7 @@ PRETTY_NAMES = {
     "h100": "H100",
     "a100": "A100",
     "a40": "A40",
+    "a10": "A10"
 }
 
 # Prices extracted from https://docs.coreweave.com/welcome-to-coreweave/resource-based-pricing on 7th Feb, 2024
