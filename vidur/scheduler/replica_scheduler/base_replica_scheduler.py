@@ -69,6 +69,10 @@ class BaseReplicaScheduler(ABC):
         return len(self._request_queue)
 
     @property
+    def num_active_requests(self) -> int:
+        return len(self._allocation_map)
+
+    @property
     def replica_id(self) -> int:
         return self._replica_id
 
