@@ -15,14 +15,21 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 . "$SCRIPT_DIR/set_hf_token.sh"
 
-cd "$SCRIPT_DIR/data/processed_traces"
-python3 cleanup_sharegpt.py --model $MODEL --share_gpt_path ShareGPT.json
-python3 trace_gen.py --qps $2 \
-                     --max-input-len $MAX_INPUT_LEN --max-output-len $MAX_OUTPUT_LEN --time $TIME \
-                     --input-inflate-rate $INPUT_INFLATE_RATE --output-inflate-rate $OUTPUT_INFLATE_RATE \
-                     --input-inflate-mult $INPUT_INFLATE_MULT --output-inflate-mult $OUTPUT_INFLATE_MULT \
-                     --output "sharegpt_$2.csv"
-cd "$SCRIPT_DIR"
+if [[ "$3" == "retrace" ]]; then
+  cd "$SCRIPT_DIR/data/processed_traces"
+  python3 cleanup_sharegpt.py --model $MODEL --share_gpt_path ShareGPT.json
+  python3 trace_gen.py --qps $2 \
+                       --max-input-len $MAX_INPUT_LEN --max-output-len $MAX_OUTPUT_LEN --time $TIME \
+                       --input-inflate-rate $INPUT_INFLATE_RATE --output-inflate-rate $OUTPUT_INFLATE_RATE \
+                       --input-inflate-mult $INPUT_INFLATE_MULT --output-inflate-mult $OUTPUT_INFLATE_MULT \
+                       --output "sharegpt_$2.csv"
+  cd "$SCRIPT_DIR"
+elif [[ "$3" == "no_retrace" ]]; then
+  echo "Skipping creating shareGPT traces, hoping they exist..."
+else
+  echo "$3 has no meaning for trace generation; should have been 'retrace' or 'no_trace'"
+  exit
+fi
 
 # --replica_config_memory_margin_fraction 0.255 \
 # --metrics_config_write_json_trace \

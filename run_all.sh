@@ -9,7 +9,11 @@ SCH_VALUES=("lor" "round_robin" "llq")
 
 for qps in "${QPS_VALUES[@]}"; do
     for sch in "${SCH_VALUES[@]}"; do
-      bash "$SCRIPT_DIR/run_single.sh" $sch $qps
+      if [[ $# -eq 1 ]]; then
+        bash "$SCRIPT_DIR/run_single.sh" $sch $qps $1
+      else
+        bash "$SCRIPT_DIR/run_single.sh" $sch $qps "retrace"
+      fi
     done
 done
 
