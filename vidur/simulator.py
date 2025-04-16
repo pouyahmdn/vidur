@@ -116,8 +116,12 @@ class Simulator:
 
     def _write_event_trace(self) -> None:
         trace_file = f"{self._config.metrics_config.output_dir}/event_trace.json"
+        def set_default( obj ):
+            if isinstance( obj, set ):
+                return list( obj )
+            raise TypeError
         with open(trace_file, "w") as f:
-            json.dump(self._event_trace, f)
+            json.dump(self._event_trace, f, default=set_default)
 
     def _write_chrome_trace(self) -> None:
         trace_file = f"{self._config.metrics_config.output_dir}/chrome_trace.json"
