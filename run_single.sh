@@ -36,7 +36,7 @@ fi
 # --metrics_config_keep_individual_batch_metrics
 python -m vidur.main  \
  --replica_config_device a10 \
- --replica_config_memory_margin_fraction 0.239 \
+ --replica_config_memory_margin_fraction 0.2445 \
  --replica_config_model_name $MODEL \
  --cluster_config_num_replicas $NUM_REPLICAS \
  --global_scheduler_config_type $1 \
