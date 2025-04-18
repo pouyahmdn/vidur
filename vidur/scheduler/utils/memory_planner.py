@@ -25,7 +25,7 @@ class MemoryPlanner:
             self._get_kv_cache_memory_per_layer_per_request() * self._replica.num_layers
         )
 
-    def get_max_batch_size(self) -> int:
+    def get_max_batch_size(self) -> float:
         available_memory = (
             self._replica.total_memory_gb
             * 1024**3
@@ -38,7 +38,7 @@ class MemoryPlanner:
 
         memory_for_kv_cache = available_memory - parameter_memory_per_device
         number_of_requests = (
-            memory_for_kv_cache // kv_cache_memory_per_device_per_request
+            memory_for_kv_cache / kv_cache_memory_per_device_per_request
         )
 
         assert (
@@ -47,5 +47,5 @@ class MemoryPlanner:
 
         return number_of_requests
 
-    def get_max_request_slots(self) -> int:
+    def get_max_request_slots(self) -> float:
         return self.get_max_batch_size() * self._replica.num_pipeline_stages

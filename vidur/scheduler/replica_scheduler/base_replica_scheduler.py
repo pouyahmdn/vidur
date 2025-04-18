@@ -38,16 +38,20 @@ class BaseReplicaScheduler(ABC):
         memory_planner = MemoryPlanner(self._replica_config, replica)
 
         if not self._config.num_blocks:
-            self._config.num_blocks = (
+            self._config.num_blocks = int(
                 self._max_blocks_per_sequence * memory_planner.get_max_request_slots()
             )
         self._max_batch_size = min(
-            memory_planner.get_max_batch_size(),
+            int(memory_planner.get_max_batch_size()),
             self._config.batch_size_cap,
         )
 
         logger.debug(
             f"Obtained max batch size of {self._max_batch_size} for replica {self._replica_id}"
+        )
+
+        logger.info(
+            f"Have enough memory for {self._config.num_blocks} blocks ({self._config.num_blocks*self._config.block_size} tokens) for replica {self._replica_id}"
         )
 
         self._request_queue = []
