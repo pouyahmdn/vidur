@@ -71,6 +71,12 @@ class UserSessionManager:
                         d[ 'num_tokens' ] *= max_mult
                         assert d[ 'num_tokens' ] <= self.workload_config.max_input_len
                         d[ 'value' ] *= max_mult
+
+                    d[ 'num_tokens' ] += 42
+                    d[ 'value' ] = ('You are a knowledgeable, efficient, and direct AI assistant. '
+                                    'Provide concise answers, focusing on the key information needed. '
+                                    'Offer suggestions tactfully when appropriate to improve outcomes. '
+                                    'Engage in productive collaboration with the user.\n\n') + d[ 'value' ]
                 else:
                     if rng.random( ) < self.workload_config.output_irate:
                         d[ 'num_tokens' ] *= self.workload_config.output_imult
@@ -131,11 +137,11 @@ def main( ):
 
     manager = UserSessionManager( workload_config )
 
-    while manager.get_next_time() < args.time:
+    while manager.get_next_time( ) < args.time:
         manager.step( )
 
-    manager.summary().to_csv( args.output, index = False )
-    print(f"{len(manager.trace)} requests in {args.time}, equivalent to {len(manager.trace)/args.time:.2f} QPS")
+    manager.summary( ).to_csv( args.output, index = False )
+    print( f"{len( manager.trace )} requests in {args.time}, equivalent to {len( manager.trace ) / args.time:.2f} QPS" )
 
 
 if __name__ == "__main__":
